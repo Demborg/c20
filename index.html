@@ -1,0 +1,61 @@
+<script>
+  const size = 1000
+  const inset = 200
+  let offsetX = 0;
+  let offsetY = 0;
+  window.onload = () => {
+    const canvas = document.getElementById("canvas")
+    canvas.addEventListener("mousemove", handleMouse)
+    canvas.addEventListener("mouseleave", resetOffset)
+    draw()
+  }
+  
+  const resetOffset = () => {
+    offsetX = 0
+    offsetY = 0
+  }
+
+  const handleMouse = (e) => {
+    offsetX = inset * (1 - 2 * e.clientX / e.srcElement.clientWidth)
+    offsetY = inset * (1 - 2 * e.clientY / e.srcElement.clientHeight)
+  }
+
+  const draw = () => {
+    const canvas = document.getElementById("canvas")
+    const ctx = canvas?.getContext("2d")
+
+    ctx.drawImage(canvas, inset - offsetX, inset - offsetY, size - 2 * inset, size - 2 * inset)
+
+    ctx.fillStyle = "darkgray"
+    ctx.fillRect(0, 0, size - offsetX, inset - offsetY)
+    ctx.fillRect(0, 0, inset - offsetX, size - offsetY)
+    ctx.fillRect(size - inset - offsetX, 0, size, size)
+    ctx.fillRect(0, size - inset - offsetY, size, size)
+    ctx.fillStyle = "#00000022"
+    ctx.fillRect(0, 0, size, size)
+
+    ctx.fillStyle = "#ffffff"
+    ctx.fillRect(0, 950, size, size)
+
+
+    requestAnimationFrame(draw)
+  }
+</script>
+
+<body>
+  <canvas id="canvas" height="1000" width="1000">
+</body>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: darkgray;
+  }
+  #canvas {
+    width: 100%;
+    max-width: 700px;
+    cursor: none;
+  }
+</style>
