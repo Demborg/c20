@@ -26,12 +26,8 @@
     ctx.fillRect(1000 - x - w, y, w, h)
   }
 
-  const draw = () => {
-    const canvas = document.getElementById("canvas")
-    const ctx = canvas?.getContext("2d")
-
+  const droste = (ctx) => {
     ctx.drawImage(canvas, inset - offsetX, inset - offsetY, size - 2 * inset, size - 2 * inset)
-
     ctx.fillStyle = "darkgray"
     ctx.fillRect(0, 0, size - offsetX, inset - offsetY)
     ctx.fillRect(0, 0, inset - offsetX, size - offsetY)
@@ -39,7 +35,9 @@
     ctx.fillRect(0, size - inset - offsetY, size, size)
     ctx.fillStyle = "#00000011"
     ctx.fillRect(0, 0, size, size)
+  }
 
+  const c20Slice = (ctx) => {
     //Seam
     ctx.fillStyle = "#000000"
     ctx.fillRect(90, 300, 820, 5)
@@ -71,6 +69,14 @@
     brightness = Math.max(180, Math.min(255, brightness + 30 * (Math.random() - 0.5)))
     ctx.fillStyle = "rgb(" + brightness + "," + brightness + "," + brightness + ")"
     fillMirror(ctx, 0, 460, 80, 200)
+  }
+
+  const draw = () => {
+    const canvas = document.getElementById("canvas")
+    const ctx = canvas?.getContext("2d")
+
+    droste(ctx)
+    c20Slice(ctx)
 
     requestAnimationFrame(draw)
   }
