@@ -5,6 +5,7 @@
   let offsetX = 0;
   let offsetY = 0;
   let previousFrame = 0;
+  let manualControl = false;
   window.onload = () => {
     const canvas = document.getElementById("canvas")
     canvas.addEventListener("mousemove", handleMouse)
@@ -13,11 +14,11 @@
   }
   
   const resetOffset = () => {
-    offsetX = 0
-    offsetY = 0
+    manualControl = false
   }
 
   const handleMouse = (e) => {
+    manualControl = true
     offsetX = inset * (1 - 2 * e.clientX / e.srcElement.clientWidth)
     offsetY = inset * (1 - 2 * e.clientY / e.srcElement.clientHeight)
   }
@@ -29,13 +30,13 @@
 
   const droste = (ctx) => {
     ctx.drawImage(canvas, inset - offsetX, inset - offsetY, size - 2 * inset, size - 2 * inset)
+    ctx.fillStyle = "#00000011"
+    ctx.fillRect(0, 0, size, size)
     ctx.fillStyle = "darkgray"
     ctx.fillRect(0, 0, size - offsetX, inset - offsetY)
     ctx.fillRect(0, 0, inset - offsetX, size - offsetY)
     ctx.fillRect(size - inset - offsetX, 0, size, size)
     ctx.fillRect(0, size - inset - offsetY, size, size)
-    ctx.fillStyle = "#00000011"
-    ctx.fillRect(0, 0, size, size)
   }
 
   const c20Slice = (ctx) => {
@@ -72,12 +73,27 @@
     fillMirror(ctx, 0, 460, 80, 200)
   }
 
+  const clamp = (x, low, high) => {
+    return Math.min(high, Math.max(low, x))
+  }
+
+  const uniform = (low, high) => {
+    return Math.random() * (high-low) + low
+  }
+
+
   const draw = () => {
     requestAnimationFrame(draw)
 
     if (Date.now() - previousFrame < frameTime) {
       return
     }
+
+    if (!manualControl) {
+      offsetX = clamp(offsetX + uniform(-5, 5), -inset, inset)
+      offsetY = clamp(offsetY + uniform(-5, 5), -inset, inset)
+    }
+
     const canvas = document.getElementById("canvas")
     const ctx = canvas?.getContext("2d")
     droste(ctx)
@@ -85,6 +101,10 @@
     previousFrame = Date.now()
   }
 </script>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
 <body>
   <canvas id="canvas" height="1000" width="1000">
@@ -95,7 +115,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: darkgray;
   }
   #canvas {
     width: 100%;
