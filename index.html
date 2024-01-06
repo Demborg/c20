@@ -1,9 +1,10 @@
 <script>
   const size = 1000
   const inset = 100
+  const frameTime = 1000 / 15;
   let offsetX = 0;
   let offsetY = 0;
-  let brightness = 200;
+  let previousFrame = 0;
   window.onload = () => {
     const canvas = document.getElementById("canvas")
     canvas.addEventListener("mousemove", handleMouse)
@@ -66,19 +67,22 @@
     fillMirror(ctx, 400, 250, 80, 40)
 
     //Windows
-    brightness = Math.max(180, Math.min(255, brightness + 30 * (Math.random() - 0.5)))
+    const brightness = Math.random() * 128 + 128
     ctx.fillStyle = "rgb(" + brightness + "," + brightness + "," + brightness + ")"
     fillMirror(ctx, 0, 460, 80, 200)
   }
 
   const draw = () => {
+    requestAnimationFrame(draw)
+
+    if (Date.now() - previousFrame < frameTime) {
+      return
+    }
     const canvas = document.getElementById("canvas")
     const ctx = canvas?.getContext("2d")
-
     droste(ctx)
     c20Slice(ctx)
-
-    requestAnimationFrame(draw)
+    previousFrame = Date.now()
   }
 </script>
 
