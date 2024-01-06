@@ -3,6 +3,7 @@
   const inset = 100
   let offsetX = 0;
   let offsetY = 0;
+  let brightness = 200;
   window.onload = () => {
     const canvas = document.getElementById("canvas")
     canvas.addEventListener("mousemove", handleMouse)
@@ -62,10 +63,14 @@
     fillMirror(ctx, 230, 610, 120, 180)
     fillMirror(ctx, 190, 800, 150, 40)
 
-    //Lights/Windows
+    //Lights
     ctx.fillStyle = "#ffffff"
-    fillMirror(ctx, 0, 460, 80, 200)
     fillMirror(ctx, 400, 250, 80, 40)
+
+    //Windows
+    brightness = Math.max(180, Math.min(255, brightness + 30 * (Math.random() - 0.5)))
+    ctx.fillStyle = "rgb(" + brightness + "," + brightness + "," + brightness + ")"
+    fillMirror(ctx, 0, 460, 80, 200)
 
     requestAnimationFrame(draw)
   }
