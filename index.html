@@ -19,8 +19,9 @@
 
   const handleMouse = (e) => {
     manualControl = true
-    offsetX = inset * (1 - 2 * e.clientX / e.srcElement.clientWidth)
-    offsetY = inset * (1 - 2 * e.clientY / e.srcElement.clientHeight)
+    const rect = e.srcElement.getBoundingClientRect()
+    offsetX = inset * (1 - 2 * (e.clientX - rect.left) / e.srcElement.clientWidth)
+    offsetY = inset * (1 - 2 * (e.clientY - rect.top) / e.srcElement.clientHeight)
   }
 
   const fillMirror = (ctx, x, y, w, h) => {
